@@ -23,4 +23,6 @@ public class TipoUsuarioController {
         return ResponseEntity.ok().body(tipoUsrRepo.findAll());
     }
 
+
+
 }
