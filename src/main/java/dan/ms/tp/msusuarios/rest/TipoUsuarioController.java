@@ -13,16 +13,13 @@ import dan.ms.tp.msusuarios.modelo.TipoUsuario;
 @RestController
 @RequestMapping("api/tipo-usuario")
 public class TipoUsuarioController {
- 
+
     @Autowired
     TipoUsuarioJpaRepository tipoUsrRepo;
 
-
     @GetMapping
-    public ResponseEntity<List<TipoUsuario>> getAllTipoUsuario(){
+    public ResponseEntity<List<TipoUsuario>> getAllTipoUsuario() {
         return ResponseEntity.ok().body(tipoUsrRepo.findAll());
     }
-
-
 
 }

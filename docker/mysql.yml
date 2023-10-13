@@ -1,9 +1,8 @@
 version: "3.8"
-
 services:
   mysql-dan:
     image: mysql:8.1.0
-    container-image: mysql-container
+    container_name: mysql-container
     environment:
       MYSQL_ROOT_PASSWORD: danrootpassword
       MYSQL_DATABASE: dan
@@ -17,7 +16,7 @@ services:
       - mynetwork
   phpmyadmin-dan:
     image: phpmyadmin/phpmyadmin
-    container-image: phpmyadmin-container
+    container_name: phpmyadmin-container
     environment:
       PMA_HOST: mysql-dan
       PMA_USER: danuser
