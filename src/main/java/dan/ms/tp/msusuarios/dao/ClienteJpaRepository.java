@@ -4,6 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import dan.ms.tp.msusuarios.modelo.Cliente;
 
-public interface ClienteJpaRepository extends JpaRepository<Cliente,Integer> {
-    
+public interface ClienteJpaRepository extends JpaRepository<Cliente, Integer> {
+
+    Cliente createCliente(Cliente cliente);
+
 }
