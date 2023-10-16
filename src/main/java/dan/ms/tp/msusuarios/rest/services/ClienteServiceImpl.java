@@ -14,7 +14,23 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public Cliente createCliente(Cliente cliente) {
-        return clienteRepo.createCliente(cliente);
+
+        // implementar validaciones
+        return clienteRepo.save(cliente);
+    }
+
+    @Override
+    public Cliente modifyCliente(Cliente cliente) {
+
+        // implementar validaciones
+        return clienteRepo.save(cliente);
+    }
+
+    @Override
+    public Void deleteCliente(Cliente cliente) {
+        clienteRepo.delete(cliente);
+        return null;
+
     }
 
 }

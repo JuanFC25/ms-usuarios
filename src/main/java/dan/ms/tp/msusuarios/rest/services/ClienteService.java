@@ -8,4 +8,8 @@ import dan.ms.tp.msusuarios.modelo.Cliente;
 public interface ClienteService {
 
     Cliente createCliente(Cliente cliente);
+
+    Cliente modifyCliente(Cliente cliente);
+
+    Void deleteCliente(Cliente cliente);
 }
