@@ -11,5 +11,9 @@ public interface ClienteService {
 
     Cliente modifyCliente(Cliente cliente);
 
-    Void deleteCliente(Cliente cliente);
+    Void deleteCliente(Integer id);
+
+    Cliente getClienteById(Integer id);
+
+    Cliente getUserByCUIT(String cuit);
 }

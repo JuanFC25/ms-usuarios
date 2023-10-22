@@ -27,10 +27,20 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public Void deleteCliente(Cliente cliente) {
-        clienteRepo.delete(cliente);
+    public Void deleteCliente(Integer id) {
+        clienteRepo.deleteById(id);
         return null;
 
+    }
+
+    @Override
+    public Cliente getClienteById(Integer id) {
+        return clienteRepo.findById(id).get();
+    }
+
+    @Override
+    public Cliente getUserByCUIT(String cuit) {
+        return clienteRepo.findByCuit(cuit);
     }
 
 }
