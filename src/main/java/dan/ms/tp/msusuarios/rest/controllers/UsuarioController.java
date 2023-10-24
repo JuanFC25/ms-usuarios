@@ -45,19 +45,17 @@ public class UsuarioController {
         return ResponseEntity.ok().body(usuarioService.getUserById(id));
     }
 
-    // // obtener usuario por cliente
-    // @GetMapping(value = "/search/cliente/{idCliente}")
-    // public ResponseEntity<Usuario> getUserByClientId(@RequestBody @PathVariable
-    // Integer idCliente) {
-    // return ResponseEntity.ok().body(usuarioService.getUserByClientId(idCliente));
-    // }
+    // obtener usuario por cliente
+    @GetMapping(value = "/search/cliente/{idCliente}")
+    public ResponseEntity<Usuario> getUserByClientId(@RequestBody @PathVariable Integer idCliente) {
+        return ResponseEntity.ok().body(usuarioService.getUserByClientId(idCliente));
+    }
 
-    // // obtener usuario por cliente y por Tipo de Usuario
-    // @GetMapping(value = "/search/cliente/{idCliente}/{userType}")
-    // public ResponseEntity<Usuario> getUserByClientIdAndUserType(@RequestBody
-    // @PathVariable Integer idCliente,
-    // @PathVariable Integer userType) {
-    // return ResponseEntity.ok()
-    // .body(usuarioService.getUserByClientIdAndUserType(idCliente, userType));
-    // }
+    // obtener usuario por cliente y por Tipo de Usuario
+    @GetMapping(value = "/search/cliente/{idCliente}/{userType}")
+    public ResponseEntity<Usuario> getUserByClientIdAndUserType(@RequestBody @PathVariable Integer idCliente,
+            @PathVariable Integer userType) {
+        return ResponseEntity.ok()
+                .body(usuarioService.getUserByClientIdAndUserType(idCliente, userType));
+    }
 }

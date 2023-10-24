@@ -15,8 +15,8 @@ public interface UsuarioService {
 
     Usuario getUserById(Integer id);
 
-    // Usuario getUserByClientId(Integer idCliente);
+    Usuario getUserByClientId(Integer idCliente);
 
-    // Usuario getUserByClientIdAndUserType(Integer idCliente, Integer userType);
+    Usuario getUserByClientIdAndUserType(Integer idCliente, Integer userType);
 
 }
