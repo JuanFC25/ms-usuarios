@@ -1,7 +1,8 @@
 package dan.ms.tp.msusuarios.rest.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import dan.ms.tp.msusuarios.exception.ClienteDuplicadoException;
-import dan.ms.tp.msusuarios.exception.ClienteInvalidModificationException;
-import dan.ms.tp.msusuarios.exception.ClienteNotFoundException;
+import dan.ms.tp.msusuarios.exception.ApiValidationException;
+import dan.ms.tp.msusuarios.exception.Cliente.ClienteInvalidModificationException;
+import dan.ms.tp.msusuarios.exception.Cliente.ClienteNotFoundException;
 import dan.ms.tp.msusuarios.modelo.Cliente;
 
 import dan.ms.tp.msusuarios.rest.services.ClienteService;
@@ -30,61 +31,41 @@ public class ClienteController {
 
     // alta cliente
     @PostMapping(value = "/create")
-    public ResponseEntity<Cliente> createUser(@RequestBody Cliente cliente) {
-        try{ 
-            return ResponseEntity.ok().body(clienteService.createCliente(cliente));
-        } catch(ClienteDuplicadoException e){
-            return ResponseEntity.status(HttpStatusCode.valueOf(409)).build();
-        }
+    public ResponseEntity<Cliente> createCliente(@RequestBody Cliente cliente) throws ApiValidationException {
+        return ResponseEntity.ok().body(clienteService.createCliente(cliente));
     }
 
     // ver si es necesario el id en la direccion
 
     // modificacion cliente
     @PutMapping(value = "/modify")
-    public ResponseEntity<Cliente> modifyUser(@RequestBody Cliente cliente) {
-         try{ 
+    public ResponseEntity<Cliente> modifyCliente(@RequestBody Cliente cliente) throws ApiValidationException {
             return ResponseEntity.ok().body(clienteService.modifyCliente(cliente));
-        } catch(ClienteNotFoundException e){
-            return ResponseEntity.notFound().build();
-        } catch(ClienteInvalidModificationException e){
-            return ResponseEntity.status(HttpStatusCode.valueOf(409)).build();
-        }
-        
     }
 
     // baja cliente
     // probar a modificar el void
     @DeleteMapping(value = "/delete/{id}")
-    public ResponseEntity<Void> deleteUser(@RequestBody @PathVariable Integer id) {
-        try{
+    public ResponseEntity<Void> deleteCliente(@RequestBody @PathVariable Integer id) throws ApiValidationException {
         ResponseEntity.ok().body(clienteService.deleteCliente(id));
         return null;
-        } catch(ClienteNotFoundException e){
-            return ResponseEntity.notFound().build();
-        }
     }
 
     // busqueda por id
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Cliente> getUserById(@PathVariable Integer id) {
-        try{
-        return ResponseEntity.ok().body(clienteService.getClienteById(id));
-        } catch(ClienteNotFoundException e){
-            return ResponseEntity.notFound().build();
-        }
-        
+    public ResponseEntity<Cliente> getClienteById(@PathVariable Integer id) throws ApiValidationException {
+        return ResponseEntity.ok().body(clienteService.getClienteById(id));       
     }
 
     // busqueda por CUIT
     @GetMapping(value = "/search/{cuit}")
-    public ResponseEntity<Cliente> getUserByCUIT(@PathVariable String cuit) {
-        try{
+    public ResponseEntity<Cliente> getClienteByCUIT(@PathVariable String cuit) throws ApiValidationException {
         return ResponseEntity.ok().body(clienteService.getUserByCUIT(cuit));
-        } catch(ClienteNotFoundException e){
-            return ResponseEntity.notFound().build();
-        }
-        
+    }
+
+    @GetMapping(value = "/")
+    public ResponseEntity<List<Cliente>> getAllClientes() throws ApiValidationException {
+        return ResponseEntity.ok().body(clienteService.getAllClientes());
     }
 
 }

@@ -1,14 +1,16 @@
 package dan.ms.tp.msusuarios.rest.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.integration.IntegrationProperties.RSocket.Client;
 import org.springframework.stereotype.Service;
 
 import dan.ms.tp.msusuarios.dao.ClienteJpaRepository;
-import dan.ms.tp.msusuarios.exception.ClienteDuplicadoException;
-
-import dan.ms.tp.msusuarios.exception.ClienteInvalidModificationException;
-import dan.ms.tp.msusuarios.exception.ClienteNotFoundException;
+import dan.ms.tp.msusuarios.exception.Cliente.ClienteDuplicadoException;
+import dan.ms.tp.msusuarios.exception.Cliente.ClienteInvalidModificationException;
+import dan.ms.tp.msusuarios.exception.Cliente.ClienteNotFoundException;
+import dan.ms.tp.msusuarios.exception.Cliente.ClienteValidationException;
 import dan.ms.tp.msusuarios.modelo.Cliente;
 
 @Service
@@ -29,7 +31,7 @@ public class ClienteServiceImpl implements ClienteService {
    
 
     @Override
-    public Cliente modifyCliente(Cliente cliente) throws ClienteNotFoundException, ClienteInvalidModificationException {
+    public Cliente modifyCliente(Cliente cliente) throws ClienteValidationException {
 
        Cliente c = clienteRepo.findById(cliente.getId()).get();
        if(c==null){
@@ -71,5 +73,10 @@ public class ClienteServiceImpl implements ClienteService {
 
     private boolean repeatedCuit(String cuit) {
         return clienteRepo.findAll().stream().filter(c->c.getCuit().equals(cuit)).findAny().isPresent();
+    }
+
+    @Override
+    public List<Cliente> getAllClientes() {
+        return clienteRepo.findAll();
     }
 }

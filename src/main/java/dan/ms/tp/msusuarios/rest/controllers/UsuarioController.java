@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import dan.ms.tp.msusuarios.exception.ApiValidationException;
 import dan.ms.tp.msusuarios.modelo.Usuario;
 import dan.ms.tp.msusuarios.rest.services.UsuarioService;
 
@@ -23,7 +24,7 @@ public class UsuarioController {
 
     // alta usuario
     @PostMapping(value = "/create")
-    public ResponseEntity<Usuario> createUser(@RequestBody Usuario usuario) {
+    public ResponseEntity<Usuario> createUser(@RequestBody Usuario usuario) throws ApiValidationException {
         return ResponseEntity.ok().body(usuarioService.createUser(usuario));
     }
 

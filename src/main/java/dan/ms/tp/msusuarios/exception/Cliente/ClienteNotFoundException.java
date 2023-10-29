@@ -1,6 +1,6 @@
-package dan.ms.tp.msusuarios.exception;
+package dan.ms.tp.msusuarios.exception.Cliente;
 
-public class ClienteNotFoundException extends Exception {
+public class ClienteNotFoundException extends ClienteValidationException {
 
     public ClienteNotFoundException(Integer id) {
         super("No existe un cliente con este "+id+" id.");
