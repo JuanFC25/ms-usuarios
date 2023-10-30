@@ -33,8 +33,8 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public Usuario createUser(Usuario usuario) throws UsuarioValidationException  {
 
-        //validateUserPassword(usuario);
-        validateUserClienteType(usuario);
+        validateUserPassword(usuario);
+        validateUserTypeOfCliente(usuario);
 
         return usuarioRepository.save(usuario);
     }
@@ -76,20 +76,27 @@ public class UsuarioServiceImpl implements UsuarioService {
         if(user.getPassword() == null){
             throw new UsuarioPasswordValidationException();
         }
-
-        String passwordRegex = "^(?=.[A-Z])(?=.[a-z])(?=.\\d)(?=.[@#$%^&+=!]).{12,}$";
-        Pattern pattern = Pattern.compile(passwordRegex);
-        Matcher matcher = pattern.matcher(user.getPassword());
-
-        if(!matcher.find()){
+        
+        if(!checkPassword(user.getPassword())){
             throw new UsuarioPasswordValidationException();
-        }
+        } 
     }
 
-    private void validateUserClienteType(Usuario usuario) throws UsuarioTipoGerenteValidationException{
+    private boolean checkPassword(String password) {
+        if (password.length() < 12 || 
+        !password.matches(".*[A-Z].*") || 
+        !password.matches(".*[a-z].*") || 
+        !password.matches(".*\\d.*") || 
+        !password.matches(".*[()@#$%^&+=!].*")) {
+            return false;
+        }
+        return true;
+    }
+
+    private void validateUserTypeOfCliente(Usuario usuario) throws UsuarioTipoGerenteValidationException{
         Optional<TipoUsuario> tipoGerente = tipoUsuarioRepository.findOneByTipo("ADMIN");
         List<Usuario> usuariosDeCliente = usuarioRepository.findAllByCliente(usuario.getCliente());
-        if(usuariosDeCliente == null){
+        if(usuariosDeCliente == null || usuariosDeCliente.size() == 0){
             return;
         }
         if(usuario.getTipoUsuario().getId() != tipoGerente.get().getId()){
