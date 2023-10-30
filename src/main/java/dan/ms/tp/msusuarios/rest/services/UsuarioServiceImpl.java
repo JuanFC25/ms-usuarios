@@ -89,6 +89,9 @@ public class UsuarioServiceImpl implements UsuarioService {
     private void validateUserClienteType(Usuario usuario) throws UsuarioTipoGerenteValidationException{
         Optional<TipoUsuario> tipoGerente = tipoUsuarioRepository.findOneByTipo("ADMIN");
         List<Usuario> usuariosDeCliente = usuarioRepository.findAllByCliente(usuario.getCliente());
+        if(usuariosDeCliente == null){
+            return;
+        }
         if(usuario.getTipoUsuario().getId() != tipoGerente.get().getId()){
             return;
         }
