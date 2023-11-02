@@ -1,5 +1,7 @@
 package dan.ms.tp.msusuarios.rest.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,27 +38,32 @@ public class UsuarioController {
 
     // modificar usuario
     @PutMapping(value = "/modify")
-    public ResponseEntity<Usuario> modifyUser(@RequestBody Usuario usuario) {
+    public ResponseEntity<Usuario> modifyUser(@RequestBody Usuario usuario) throws ApiValidationException{
         return ResponseEntity.ok().body(usuarioService.modifyUser(usuario));
     }
 
     // obtener usuario por ID
     @GetMapping(value = "/{id}")
     public ResponseEntity<Usuario> getUserById(@RequestBody @PathVariable Integer id) {
-        return ResponseEntity.ok().body(usuarioService.getUserById(id));
+        Usuario usuario = usuarioService.getUserById(id);
+        if(usuario == null){
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok().body(usuario);
     }
 
-    // obtener usuario por cliente
+    // obtener usuarios por cliente
     @GetMapping(value = "/search/cliente/{idCliente}")
-    public ResponseEntity<Usuario> getUserByClientId(@RequestBody @PathVariable Integer idCliente) {
-        return ResponseEntity.ok().body(usuarioService.getUserByClientId(idCliente));
+    public ResponseEntity<List<Usuario>> getUsersByClientId(@RequestBody @PathVariable Integer idCliente) throws ApiValidationException {
+        return ResponseEntity.ok().body(usuarioService.getUsersByClientId(idCliente));
     }
 
-    // obtener usuario por cliente y por Tipo de Usuario
+    // obtener usuarios por cliente y por Tipo de Usuario
     @GetMapping(value = "/search/cliente/{idCliente}/{userType}")
-    public ResponseEntity<Usuario> getUserByClientIdAndUserType(@RequestBody @PathVariable Integer idCliente,
-            @PathVariable Integer userType) {
+    public ResponseEntity<List<Usuario>> getUsersByClientIdAndUserType(@RequestBody @PathVariable Integer idCliente,
+            @PathVariable Integer userType) throws ApiValidationException{
         return ResponseEntity.ok()
-                .body(usuarioService.getUserByClientIdAndUserType(idCliente, userType));
+                .body(usuarioService.getUsersByClientIdAndUserType(idCliente, userType));
     }
 }

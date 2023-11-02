@@ -11,9 +11,13 @@ import org.springframework.stereotype.Service;
 import dan.ms.tp.msusuarios.dao.ClienteJpaRepository;
 import dan.ms.tp.msusuarios.dao.TipoUsuarioJpaRepository;
 import dan.ms.tp.msusuarios.dao.UsuarioJpaRepository;
+import dan.ms.tp.msusuarios.exception.Usuario.UsuarioClienteEmptyValidationException;
+import dan.ms.tp.msusuarios.exception.Usuario.UsuarioClienteNotFoundValidationException;
 import dan.ms.tp.msusuarios.exception.Usuario.UsuarioPasswordValidationException;
 import dan.ms.tp.msusuarios.exception.Usuario.UsuarioTipoGerenteValidationException;
 import dan.ms.tp.msusuarios.exception.Usuario.UsuarioValidationException;
+import dan.ms.tp.msusuarios.exception.Usuario.UsuarioTipoUsuarioEmptyValidationException;
+import dan.ms.tp.msusuarios.exception.Usuario.UsuarioTipoUsuarioNotFoundValidationException;
 import dan.ms.tp.msusuarios.modelo.Cliente;
 import dan.ms.tp.msusuarios.modelo.TipoUsuario;
 import dan.ms.tp.msusuarios.modelo.Usuario;
@@ -32,7 +36,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public Usuario createUser(Usuario usuario) throws UsuarioValidationException  {
-
+        validateAndSetTipoUsuario(usuario);
+        validateAndSetCliente(usuario);
         validateUserPassword(usuario);
         validateUserTypeOfCliente(usuario);
 
@@ -46,30 +51,47 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public Usuario modifyUser(Usuario usuario) {
+    public Usuario modifyUser(Usuario usuario) throws UsuarioValidationException  {
+        validateAndSetTipoUsuario(usuario);
+        validateAndSetCliente(usuario);
+        validateUserPassword(usuario);
+        validateUserTypeOfCliente(usuario);
+
         return usuarioRepository.save(usuario);
     }
 
     @Override
     public Usuario getUserById(Integer id) {
-        return usuarioRepository.findById(id).get();
+        Optional<Usuario> user = usuarioRepository.findById(id);
+        return user.isPresent() ? user.get() : null; // avoid internal server error;
     }
 
     @Override
-    public Usuario getUserByClientId(Integer idCliente) {
+    public List<Usuario> getUsersByClientId(Integer idCliente) throws UsuarioClienteNotFoundValidationException {
 
-        Cliente cliente = clienteRepository.findById(idCliente).get();
+        Optional<Cliente> cliente = clienteRepository.findById(idCliente);
 
-        return usuarioRepository.findByCliente(cliente).get();
+        if(!cliente.isPresent()){
+            throw new UsuarioClienteNotFoundValidationException();
+        }
+
+        return usuarioRepository.findByCliente(cliente.get());
 
     }
 
     @Override
-    public Usuario getUserByClientIdAndUserType(Integer idCliente, Integer userType) {
-        Cliente cliente = clienteRepository.findById(idCliente).get();
-        TipoUsuario tipoUsuario = tipoUsuarioRepository.findById(userType).get();
+    public List<Usuario> getUsersByClientIdAndUserType(Integer idCliente, Integer userType) throws UsuarioClienteNotFoundValidationException, UsuarioTipoUsuarioEmptyValidationException {
+        Optional<Cliente> cliente = clienteRepository.findById(idCliente);
+        if(!cliente.isPresent()){
+            throw new UsuarioClienteNotFoundValidationException();
+        }
 
-        return usuarioRepository.findByClienteAndTipoUsuario(cliente, tipoUsuario).get();
+        Optional<TipoUsuario> tipoUsuario = tipoUsuarioRepository.findById(userType);
+        if(!tipoUsuario.isPresent()){
+            throw new UsuarioTipoUsuarioEmptyValidationException();
+        }
+
+        return usuarioRepository.findByClienteAndTipoUsuario(cliente.get(), tipoUsuario.get());
     }
 
     private void validateUserPassword(Usuario user) throws UsuarioPasswordValidationException{
@@ -87,14 +109,20 @@ public class UsuarioServiceImpl implements UsuarioService {
         !password.matches(".*[A-Z].*") || 
         !password.matches(".*[a-z].*") || 
         !password.matches(".*\\d.*") || 
-        !password.matches(".*[()@#$%^&+=!].*")) {
+        !password.matches(".*[()@#$%^&+=!?-_].*")) {
             return false;
         }
         return true;
     }
 
-    private void validateUserTypeOfCliente(Usuario usuario) throws UsuarioTipoGerenteValidationException{
+    private void validateUserTypeOfCliente(Usuario usuario) throws UsuarioTipoGerenteValidationException, UsuarioValidationException{
         Optional<TipoUsuario> tipoGerente = tipoUsuarioRepository.findOneByTipo("ADMIN");
+        if(!tipoGerente.isPresent()){
+            // No TipoUsuario admin/gerente on db
+            // one option is to crash the app for not initialized db... the other is to only throw TODO: Should result in a StatusCode 500 here.
+            throw new UsuarioValidationException("Tipo de usuario gerente no encontrado.");
+        }
+
         List<Usuario> usuariosDeCliente = usuarioRepository.findAllByCliente(usuario.getCliente());
         if(usuariosDeCliente == null || usuariosDeCliente.size() == 0){
             return;
@@ -107,6 +135,36 @@ public class UsuarioServiceImpl implements UsuarioService {
             throw new UsuarioTipoGerenteValidationException();
         }
 
+    }
+
+    private void validateAndSetTipoUsuario(Usuario usuario) throws UsuarioTipoUsuarioNotFoundValidationException, UsuarioTipoUsuarioEmptyValidationException{
+        // we don't allow Usuario without TipoUsuario
+        if(usuario.getTipoUsuario() == null){
+            throw new UsuarioTipoUsuarioEmptyValidationException();
+        }
+
+        Optional<TipoUsuario> tipoUsuario = tipoUsuarioRepository.findById(usuario.getTipoUsuario().getId());
+
+        if(!tipoUsuario.isPresent()){
+            throw new UsuarioTipoUsuarioNotFoundValidationException();
+        }
+
+        usuario.setTipoUsuario(tipoUsuario.get());
+    }
+
+    private void validateAndSetCliente(Usuario usuario) throws UsuarioClienteNotFoundValidationException, UsuarioClienteEmptyValidationException{
+        // we don't allow Usuario without Cliente
+        if(usuario.getCliente() == null){
+            throw new UsuarioClienteEmptyValidationException();
+        }
+
+        Optional<Cliente> clienteUsuario = clienteRepository.findById(usuario.getCliente().getId());
+
+        if(!clienteUsuario.isPresent()){
+            throw new UsuarioClienteNotFoundValidationException();
+        }
+
+        usuario.setCliente(clienteUsuario.get());
     }
 
 }

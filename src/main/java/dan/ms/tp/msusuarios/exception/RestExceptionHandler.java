@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class RestExceptionHandler {
 
-    private static String ValidationHeaderMessage = "Error de Validacion";
+    private static String ValidationHeaderMessage = "Error de Validación";
     
     @ExceptionHandler(value= {ApiValidationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)

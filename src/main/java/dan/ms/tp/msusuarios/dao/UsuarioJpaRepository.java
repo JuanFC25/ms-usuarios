@@ -14,9 +14,9 @@ import java.util.List;
 @Repository
 public interface UsuarioJpaRepository extends JpaRepository<Usuario, Integer> {
 
-    Optional<Usuario> findByCliente(Cliente cliente);
+    List<Usuario> findByCliente(Cliente cliente);
 
-    Optional<Usuario> findByClienteAndTipoUsuario(Cliente cliente, TipoUsuario tipoUsuario);
+    List<Usuario> findByClienteAndTipoUsuario(Cliente cliente, TipoUsuario tipoUsuario);
 
     List<Usuario> findAllByCliente(Cliente cliente);
     // Usuario findByClientIdAndUserType(Integer idCliente, Integer userType);
