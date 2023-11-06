@@ -1,6 +1,7 @@
 package dan.ms.tp.msusuarios.rest.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.integration.IntegrationProperties.RSocket.Client;
@@ -33,13 +34,15 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public Cliente modifyCliente(Cliente cliente) throws ClienteValidationException {
 
-       Cliente c = clienteRepo.findById(cliente.getId()).get();
-       if(c==null){
-            throw new ClienteNotFoundException(cliente.getId());
-       }
-       if(c.getCuit() != cliente.getCuit()){
+       Optional<Cliente> clienteOpt = clienteRepo.findById(cliente.getId());
+       if(!clienteOpt.isPresent()){
+           throw new ClienteNotFoundException(cliente.getId());
+        }
+        
+        Cliente c = clienteOpt.get();
+        if(!c.getCuit().equals(cliente.getCuit())){
             throw new ClienteInvalidModificationException(cliente.getCuit());
-       }
+        }
         return clienteRepo.save(cliente);
     }
 
@@ -55,7 +58,12 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public Cliente getClienteById(Integer id) throws ClienteNotFoundException {
-        Cliente c = clienteRepo.findById(id).get();
+        Optional<Cliente> clienteOpt = clienteRepo.findById(id);
+        if(!clienteOpt.isPresent()){
+           throw new ClienteNotFoundException(id);
+        }
+
+        Cliente c = clienteOpt.get();
         if(c==null){
             throw new ClienteNotFoundException(id);
         }
