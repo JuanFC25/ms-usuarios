@@ -19,6 +19,9 @@ public interface UsuarioJpaRepository extends JpaRepository<Usuario, Integer> {
     List<Usuario> findByClienteAndTipoUsuario(Cliente cliente, TipoUsuario tipoUsuario);
 
     List<Usuario> findAllByCliente(Cliente cliente);
+
+    Optional<Usuario> findByUserName(String username);
+
     // Usuario findByClientIdAndUserType(Integer idCliente, Integer userType);
 
 }
