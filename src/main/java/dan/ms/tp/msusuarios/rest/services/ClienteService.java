@@ -4,9 +4,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import dan.ms.tp.msusuarios.exception.Cliente.ClienteDuplicadoException;
-import dan.ms.tp.msusuarios.exception.Cliente.ClienteInvalidModificationException;
-import dan.ms.tp.msusuarios.exception.Cliente.ClienteNotFoundException;
 import dan.ms.tp.msusuarios.exception.Cliente.ClienteValidationException;
 import dan.ms.tp.msusuarios.modelo.Cliente;
 

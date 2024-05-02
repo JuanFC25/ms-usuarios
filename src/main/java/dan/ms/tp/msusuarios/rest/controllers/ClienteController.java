@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import dan.ms.tp.msusuarios.exception.ApiValidationException;
-import dan.ms.tp.msusuarios.exception.Cliente.ClienteInvalidModificationException;
-import dan.ms.tp.msusuarios.exception.Cliente.ClienteNotFoundException;
 import dan.ms.tp.msusuarios.modelo.Cliente;
 
 import dan.ms.tp.msusuarios.rest.services.ClienteService;
