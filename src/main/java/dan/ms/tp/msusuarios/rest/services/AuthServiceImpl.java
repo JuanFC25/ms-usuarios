@@ -96,6 +96,7 @@ public class AuthServiceImpl implements AuthService {
             
             String token = Jwts.builder()
                 .claim("sub", usuario.getUserName())
+                .claim("tipo", usuario.getTipoUsuario())
                 .setExpiration(expDate)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
