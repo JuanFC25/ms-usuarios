@@ -2,9 +2,6 @@ package dan.ms.tp.msusuarios.rest.services;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +10,7 @@ import dan.ms.tp.msusuarios.dao.TipoUsuarioJpaRepository;
 import dan.ms.tp.msusuarios.dao.UsuarioJpaRepository;
 import dan.ms.tp.msusuarios.exception.Usuario.UsuarioClienteEmptyValidationException;
 import dan.ms.tp.msusuarios.exception.Usuario.UsuarioClienteNotFoundValidationException;
+import dan.ms.tp.msusuarios.exception.Usuario.UsuarioExisteValidationException;
 import dan.ms.tp.msusuarios.exception.Usuario.UsuarioPasswordValidationException;
 import dan.ms.tp.msusuarios.exception.Usuario.UsuarioTipoGerenteValidationException;
 import dan.ms.tp.msusuarios.exception.Usuario.UsuarioValidationException;
@@ -36,12 +34,25 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public Usuario createUser(Usuario usuario) throws UsuarioValidationException  {
+        validateUniqueUser(usuario);
         validateAndSetTipoUsuario(usuario);
         validateAndSetCliente(usuario);
         validateUserPassword(usuario);
-        validateUserTypeOfCliente(usuario);
-
+        validateUserTypeOfCliente(usuario);      
+        
         return usuarioRepository.save(usuario);
+    }
+
+    //allow default user without cliente, to be set by admin
+    @Override
+    public Usuario createDefaultFieldsUser(Usuario usuario) throws UsuarioValidationException  {
+        validateUniqueUser(usuario);
+        validateAndSetCliente(usuario);
+        validateAndSetTipoUsuario(usuario);
+        validateUserPassword(usuario);
+
+        Usuario saved = usuarioRepository.save(usuario);
+        return saved;
     }
 
     @Override
@@ -167,4 +178,11 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuario.setCliente(clienteUsuario.get());
     }
 
+    private void validateUniqueUser(Usuario usuario) throws UsuarioExisteValidationException{
+        Optional<Usuario> dupedUser = usuarioRepository.findByUserName(usuario.getUserName());
+
+        if(dupedUser.isPresent()){
+            throw new UsuarioExisteValidationException();
+        }
+    }
 }

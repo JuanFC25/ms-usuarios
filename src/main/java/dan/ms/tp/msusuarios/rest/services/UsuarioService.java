@@ -14,6 +14,8 @@ public interface UsuarioService {
 
     Usuario createUser(Usuario usuario) throws UsuarioValidationException;
 
+    public Usuario createDefaultFieldsUser(Usuario usuario) throws UsuarioValidationException;
+
     Void deleteUser(Integer id);
 
     Usuario modifyUser(Usuario usuario) throws UsuarioValidationException;

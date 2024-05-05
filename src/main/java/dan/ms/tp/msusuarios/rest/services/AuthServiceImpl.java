@@ -10,7 +10,10 @@ import javax.crypto.SecretKey;
 
 import dan.ms.tp.msusuarios.dao.UsuarioJpaRepository;
 import dan.ms.tp.msusuarios.dto.AuthLoginDto;
+import dan.ms.tp.msusuarios.dto.AuthRegisterDto;
 import dan.ms.tp.msusuarios.dto.AuthTokenDto;
+import dan.ms.tp.msusuarios.exception.ApiValidationException;
+import dan.ms.tp.msusuarios.modelo.TipoUsuario;
 import dan.ms.tp.msusuarios.modelo.Usuario;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -23,7 +26,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     UsuarioJpaRepository usuarioRepository;
-
+    @Autowired
+    UsuarioService usuarioService;
     private static final String JWT_SECRET = "SUPER_SECRET_DEFAULT_KEY_FOR_THIS_MS"; // ENV
     long EXPIRE_TIME = 3600 * 24 * 7; // secs
 
@@ -46,8 +50,17 @@ public class AuthServiceImpl implements AuthService {
     }
     
     @Override
-    public Usuario register(Usuario dto) {
-        throw new UnsupportedOperationException("Unimplemented method 'register'");
+    public Usuario register(AuthRegisterDto dto) throws ApiValidationException{
+        Usuario usuario = dto.toUser();
+
+        TipoUsuario defaultTipoUsuario = new TipoUsuario();
+        defaultTipoUsuario.setId(2); // TODO: |CHECKME| default user
+
+        usuario.setTipoUsuario(defaultTipoUsuario);
+        usuario = usuarioService.createDefaultFieldsUser(usuario);
+
+        return usuario;
+        // throw new UnsupportedOperationException("Unimplemented method 'register'");
     }
 
     @Override
