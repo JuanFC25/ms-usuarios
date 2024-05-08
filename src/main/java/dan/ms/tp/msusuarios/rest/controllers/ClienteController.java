@@ -56,7 +56,7 @@ public class ClienteController {
     }
 
     // busqueda por CUIT
-    @GetMapping(value = "/search/{cuit}")
+    @GetMapping(value = "/search/cuit/{cuit}")
     public ResponseEntity<Cliente> getClienteByCUIT(@PathVariable String cuit) throws ApiValidationException {
         return ResponseEntity.ok().body(clienteService.getClienteByCUIT(cuit));
     }
