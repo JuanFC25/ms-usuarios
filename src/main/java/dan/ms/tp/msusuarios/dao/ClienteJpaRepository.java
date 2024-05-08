@@ -7,4 +7,5 @@ import dan.ms.tp.msusuarios.modelo.Cliente;
 public interface ClienteJpaRepository extends JpaRepository<Cliente, Integer> {
 
     Cliente findByCuit(String cuit);
+    Cliente findByRazonSocial(String razonSocial);
 }

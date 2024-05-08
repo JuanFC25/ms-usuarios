@@ -20,5 +20,7 @@ public interface ClienteService {
 
     Cliente getClienteByCUIT(String cuit) throws ClienteValidationException;
 
+    Cliente getClienteByRazonSocial(String cuit) throws ClienteValidationException;
+
     List<Cliente> getAllClientes();
 }

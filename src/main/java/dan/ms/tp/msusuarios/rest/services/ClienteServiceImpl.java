@@ -79,7 +79,16 @@ public class ClienteServiceImpl implements ClienteService {
     public Cliente getClienteByCUIT(String cuit) throws ClienteNotFoundException {
         Cliente c = clienteRepo.findByCuit(cuit);
         if(c == null){
-            throw new ClienteNotFoundException(cuit);
+            throw new ClienteNotFoundException(cuit, Field.CUIT);
+        }
+        return c;
+    }
+
+    @Override
+    public Cliente getClienteByRazonSocial(String razonSocial) throws ClienteNotFoundException {
+        Cliente c = clienteRepo.findByRazonSocial(razonSocial);
+        if(c == null){
+            throw new ClienteNotFoundException(razonSocial, Field.RAZON_SOCIAL);
         }
         return c;
     }

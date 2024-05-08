@@ -61,6 +61,12 @@ public class ClienteController {
         return ResponseEntity.ok().body(clienteService.getClienteByCUIT(cuit));
     }
 
+    @GetMapping(value = "/search/razonSocial/{razonSocial}")
+    public ResponseEntity<Cliente> getClienteByRazonSocial(@PathVariable String razonSocial) throws ApiValidationException {
+        return ResponseEntity.ok().body(clienteService.getClienteByRazonSocial(razonSocial));
+    }
+    
+
     @GetMapping(value = "/")
     public ResponseEntity<List<Cliente>> getAllClientes() throws ApiValidationException {
         return ResponseEntity.ok().body(clienteService.getAllClientes());
