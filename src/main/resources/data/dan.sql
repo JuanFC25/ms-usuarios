@@ -53,7 +53,9 @@ CREATE TABLE `USR_TIPO_USUARIO` (
 
 INSERT INTO `USR_TIPO_USUARIO` (`ID`, `TIPO`) VALUES
 (1, 'ADMIN'),
-(2, 'EMPLEADO');
+(2, 'EMPLEADO'),
+(3, 'CLIENTE');
+
 
 -- --------------------------------------------------------
 
