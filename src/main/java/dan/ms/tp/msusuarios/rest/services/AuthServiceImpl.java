@@ -54,7 +54,7 @@ public class AuthServiceImpl implements AuthService {
         Usuario usuario = dto.toUser();
 
         TipoUsuario defaultTipoUsuario = new TipoUsuario();
-        defaultTipoUsuario.setId(2); // TODO: |CHECKME| default user
+        defaultTipoUsuario.setId(3); // Tipo Cliente
 
         usuario.setTipoUsuario(defaultTipoUsuario);
         usuario = usuarioService.createDefaultFieldsUser(usuario);
@@ -96,7 +96,10 @@ public class AuthServiceImpl implements AuthService {
             
             String token = Jwts.builder()
                 .claim("sub", usuario.getUserName())
+                .claim("id", usuario.getId())
                 .claim("tipo", usuario.getTipoUsuario())
+                .claim("clienteId", usuario.getCliente().getId())
+                .claim("clienteRazonSocial", usuario.getCliente().getRazonSocial())
                 .setExpiration(expDate)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
