@@ -76,7 +76,7 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public Cliente getUserByCUIT(String cuit) throws ClienteNotFoundException {
+    public Cliente getClienteByCUIT(String cuit) throws ClienteNotFoundException {
         Cliente c = clienteRepo.findByCuit(cuit);
         if(c == null){
             throw new ClienteNotFoundException(cuit);

@@ -18,7 +18,7 @@ public interface ClienteService {
 
     Cliente getClienteById(Integer id) throws ClienteValidationException;
 
-    Cliente getUserByCUIT(String cuit) throws ClienteValidationException;
+    Cliente getClienteByCUIT(String cuit) throws ClienteValidationException;
 
     List<Cliente> getAllClientes();
 }
