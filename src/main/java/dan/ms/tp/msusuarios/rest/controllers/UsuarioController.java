@@ -53,6 +53,16 @@ public class UsuarioController {
         return ResponseEntity.ok().body(usuario);
     }
 
+    @GetMapping(value = "/search/username/{username}")
+    public ResponseEntity<Usuario> getUserByUsername(@PathVariable String username) {
+        Usuario usuario = usuarioService.getUserByUsername(username);
+        if(usuario == null){
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok().body(usuario);
+    }
+
     // obtener usuarios por cliente
     @GetMapping(value = "/search/cliente/{idCliente}")
     public ResponseEntity<List<Usuario>> getUsersByClientId(@RequestBody @PathVariable Integer idCliente) throws ApiValidationException {

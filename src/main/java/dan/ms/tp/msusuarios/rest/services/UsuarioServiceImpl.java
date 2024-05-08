@@ -78,6 +78,12 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
+    public Usuario getUserByUsername(String username) {
+        Optional<Usuario> user = usuarioRepository.findByUserName(username);
+        return user.isPresent() ? user.get() : null; // avoid internal server error;
+    }
+
+    @Override
     public List<Usuario> getUsersByClientId(Integer idCliente) throws UsuarioClienteNotFoundValidationException {
 
         Optional<Cliente> cliente = clienteRepository.findById(idCliente);

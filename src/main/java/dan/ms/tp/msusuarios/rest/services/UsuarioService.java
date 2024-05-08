@@ -22,6 +22,8 @@ public interface UsuarioService {
 
     Usuario getUserById(Integer id);
 
+    Usuario getUserByUsername(String username);
+
     List<Usuario> getUsersByClientId(Integer idCliente) throws UsuarioClienteNotFoundValidationException;
 
     List<Usuario> getUsersByClientIdAndUserType(Integer idCliente, Integer userType) throws UsuarioClienteNotFoundValidationException, UsuarioTipoUsuarioEmptyValidationException;
