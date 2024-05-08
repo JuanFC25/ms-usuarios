@@ -44,7 +44,7 @@ public class UsuarioController {
 
     // obtener usuario por ID
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Usuario> getUserById(@RequestBody @PathVariable Integer id) {
+    public ResponseEntity<Usuario> getUserById(@PathVariable Integer id) {
         Usuario usuario = usuarioService.getUserById(id);
         if(usuario == null){
             return ResponseEntity.notFound().build();
