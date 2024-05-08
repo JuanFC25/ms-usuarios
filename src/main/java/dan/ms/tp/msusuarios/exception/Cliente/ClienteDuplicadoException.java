@@ -7,4 +7,13 @@ public class ClienteDuplicadoException extends ClienteValidationException{
         super("El cliente con CUIT: "+cuit+" ya existe.");
     }
 
+    public ClienteDuplicadoException(String value, Field field) {
+        super("Ya existe un cliente con " + field.name().replace("_", " ") + "" + " " + value);
+    }
+
+    public enum Field {
+        CUIT,
+        RAZON_SOCIAL,
+      }
+
 }

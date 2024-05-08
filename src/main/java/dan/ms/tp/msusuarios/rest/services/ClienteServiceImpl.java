@@ -11,6 +11,7 @@ import dan.ms.tp.msusuarios.exception.Cliente.ClienteDuplicadoException;
 import dan.ms.tp.msusuarios.exception.Cliente.ClienteInvalidModificationException;
 import dan.ms.tp.msusuarios.exception.Cliente.ClienteNotFoundException;
 import dan.ms.tp.msusuarios.exception.Cliente.ClienteValidationException;
+import dan.ms.tp.msusuarios.exception.Cliente.ClienteNotFoundException.Field;
 import dan.ms.tp.msusuarios.modelo.Cliente;
 
 @Service
@@ -21,6 +22,11 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public Cliente createCliente(Cliente cliente) throws ClienteDuplicadoException {
+
+        Cliente dupCliente = clienteRepo.findByRazonSocial(cliente.getRazonSocial());
+        if(dupCliente != null){
+            throw new ClienteDuplicadoException(cliente.getRazonSocial(), ClienteDuplicadoException.Field.RAZON_SOCIAL);
+        }
 
         if(repeatedCuit(cliente.getCuit())){
             throw new ClienteDuplicadoException(cliente.getCuit());
