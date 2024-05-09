@@ -9,6 +9,7 @@ public class AuthRegisterDto {
     public String password;
     public String correoElectronico;
     public Integer cliente;
+    public String razonSocial;
 
     public  Usuario toUser(){
         Usuario user = new Usuario();
@@ -19,6 +20,7 @@ public class AuthRegisterDto {
 
         Cliente clienteOfUser = new Cliente();
         clienteOfUser.setId(this.cliente);
+        clienteOfUser.setRazonSocial(this.razonSocial);
         user.setCliente(clienteOfUser);
 
         return user;

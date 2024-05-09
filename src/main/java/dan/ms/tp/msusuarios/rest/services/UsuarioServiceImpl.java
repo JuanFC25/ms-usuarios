@@ -51,6 +51,8 @@ public class UsuarioServiceImpl implements UsuarioService {
         validateAndSetTipoUsuario(usuario);
         validateUserPassword(usuario);
 
+        Cliente clienteSaved = clienteRepository.save(usuario.getCliente());
+        usuario.setCliente(clienteSaved);
         Usuario saved = usuarioRepository.save(usuario);
         return saved;
     }
@@ -175,13 +177,22 @@ public class UsuarioServiceImpl implements UsuarioService {
             throw new UsuarioClienteEmptyValidationException();
         }
 
-        Optional<Cliente> clienteUsuario = clienteRepository.findById(usuario.getCliente().getId());
+        // Optional<Cliente> clienteUsuario = clienteRepository.findById(usuario.getCliente().getId());
+        Cliente clienteUsuario = new Cliente();
+        clienteUsuario.setHabilitadoOnline(true);
+        clienteUsuario.setCorreoElectronico(usuario.getCorreoElectronico());
+        clienteUsuario.setId(usuario.getCliente().getId());  
+        clienteUsuario.setMaximoCuentaCorriente(10000.00);
+        clienteUsuario.setCuit("undefined");
+        clienteUsuario.setRazonSocial(usuario.getCliente().getRazonSocial());
 
-        if(!clienteUsuario.isPresent()){
-            throw new UsuarioClienteNotFoundValidationException();
-        }
 
-        usuario.setCliente(clienteUsuario.get());
+
+        // if(!clienteUsuario.isPresent()){
+        //     throw new UsuarioClienteNotFoundValidationException();
+        // }
+
+        usuario.setCliente(clienteUsuario);
     }
 
     private void validateUniqueUser(Usuario usuario) throws UsuarioExisteValidationException{

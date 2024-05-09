@@ -16,12 +16,14 @@ import dan.ms.tp.msusuarios.modelo.Cliente;
 
 import dan.ms.tp.msusuarios.rest.services.ClienteService;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("api/cliente")
+@CrossOrigin(origins = "http://localhost:3001")
 public class ClienteController {
 
     @Autowired
