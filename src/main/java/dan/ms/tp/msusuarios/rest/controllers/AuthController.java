@@ -19,7 +19,7 @@ import dan.ms.tp.msusuarios.rest.services.AuthService;
 
 @RestController
 @RequestMapping("api/auth")
-@CrossOrigin(origins = "http://localhost:3001")
+@CrossOrigin(origins = "http://localhost")
 public class AuthController {
 
     @Autowired

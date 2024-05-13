@@ -12,7 +12,7 @@ import dan.ms.tp.msusuarios.rest.services.TipoUsuarioService;
 
 @RestController
 @RequestMapping("api/tipo-usuario")
-@CrossOrigin(origins = "http://localhost:3001")
+@CrossOrigin(origins = "http://localhost")
 public class TipoUsuarioController {
 
     @Autowired

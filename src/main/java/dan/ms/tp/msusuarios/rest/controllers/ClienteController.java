@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("api/cliente")
-@CrossOrigin(origins = "http://localhost:3001")
+@CrossOrigin(origins = "http://localhost")
 public class ClienteController {
 
     @Autowired
